@@ -10,7 +10,7 @@ We deploy badge-parking-api to AWS. AWS infra created with help of terraform. Fo
 You can easily deploy code just running `./deploy.sh` script. It will automatically recognize what branch you're in and deploy 
 code to prod if you're on master branch, otherwise to dev
 
-Process looks like this:
+Under the hood process looks like this:
 
 * create Docker image
 * push Docker image to dockerhub.io
