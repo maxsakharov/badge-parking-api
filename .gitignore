@@ -1,9 +1,13 @@
 ### NODEJS
 node_modules/
-package-lock.json
 
 #### IDEA intellij #####
 .idea/
 *.iml
 *.iws
+
+#### Terraform ####
+terraform/.terraform*
+terraform/terraform.tfstate*
+terraform/terraform_backend.tf
 

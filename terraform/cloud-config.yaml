@@ -1,0 +1,46 @@
+#cloud-config
+# version #1
+coreos:
+  update:
+    reboot-strategy: off
+  units:
+    - name: update-engine.service
+      command: stop
+    - name: locksmithd.service
+      command: stop
+    - name: systemd-journal-gatewayd.socket
+      command: start
+      enable: yes
+    - name: systemd-journal-gatewayd.service
+      command: start
+      enable: yes
+    - name: cadvisor.service
+      command: start
+      runtime: true
+      content: |
+        [Unit]
+        Description=cadvisor
+
+        [Service]
+        Restart=on-failure
+        RestartSec=30
+        RestartPreventExitStatus=5
+        SyslogIdentifier=cadvisor
+        ExecStartPre=-/usr/bin/mkdir -p /srv/cadvisor
+        ExecStartPre=-/usr/bin/wget -O /srv/cadvisor/cadvisor ${cadvisor_url}
+        ExecStartPre=-/usr/bin/chmod +x /srv/cadvisor/cadvisor
+        ExecStart=/srv/cadvisor/cadvisor -port ${cadvisor_port}
+    - name: badge-api.service
+      command: start
+      runtime: true
+      content: |
+        [Unit]
+        Description=badge-api
+
+        [Service]
+        Restart=on-failure
+        RestartSec=10
+        RestartPreventExitStatus=5
+        SyslogIdentifier=badge-api.service
+        ExecStartPre=-/usr/bin/docker pull maxsakharov/badge-parking-api:${docker_image_tag}
+        ExecStart=-/usr/bin/docker run --rm --name badge-api -p 8080:8080 maxsakharov/badge-parking-api:${docker_image_tag}
