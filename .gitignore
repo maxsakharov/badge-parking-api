@@ -1,0 +1,9 @@
+### NODEJS
+node_modules/
+package-lock.json
+
+#### IDEA intellij #####
+.idea/
+*.iml
+*.iws
+
