@@ -1,0 +1,115 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Badge Parking API"
+host: "bage.io"
+basePath: "/"
+tags:
+- name: "badge"
+  description: "Interactions with badges "
+- name: "location"
+  description: "Location endpoints of dashboard screen device"
+schemes:
+- "http"
+paths:
+  /badge:
+    post:
+      tags:
+      - "badge"
+      summary: "Store badge image"
+      consumes:
+      - multipart/form-data
+      parameters:
+      - in: formData
+        name: badge
+        type: file
+        description: The file to upload
+      responses:
+        201:
+          description: "Image added"
+          schema:
+            $ref: "#/definitions/Badge"
+        405:
+          description: "Invalid input"
+  /badge/dashbaord:
+    get:
+      tags:
+      - "badge"
+      summary: "Returns badge on the dashbaord"
+      produces:
+      - image/png
+      responses:
+        200:
+          description: Badge image on the dashboard
+  /badge/{id}:
+    get:
+      tags:
+      - "badge"
+      summary: "Returns badge image metadata"
+      produces:
+      - image/png
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of badge"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Badge image"
+        404:
+          description: "No such image"
+  /badge/list:
+    get:
+      tags:
+      - "badge"
+      summary: "Returns list of all available badges"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Badge"
+        404:
+          description: "No such image"
+  /location:
+    post:
+      tags:
+      - "location"
+      summary: "Aknowledge badge app server about badge device location"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "lat"
+        in: "query"
+        description: "latitude of badge device location"
+        required: true
+        type: "string"
+      - name: "long"
+        in: "query"
+        description: "longitude of badge device location"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful response"
+definitions:
+  Badge:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      createed_at: 
+        type: "string"
+        format: "date-time"
+        description: "date in UTC when badge was created"
+      location:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
