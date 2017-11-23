@@ -7,7 +7,9 @@
   },
   "dependencies": {
     "aws-sdk": "^2.54.0",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "swaggerize-express": "^4.0.5",
+    "swagmock": "^1.0.0"
   },
   "devDependencies": {
     "mocha": "^3.1.2",
