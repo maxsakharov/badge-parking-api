@@ -79,10 +79,12 @@ paths:
               $ref: "#/definitions/Badge"
         404:
           description: "No such badge"
-    patch:
+    put:
       tags:
       - "badge"
       summary: "Updates badge data"
+      consumes:
+      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
       parameters:
@@ -91,19 +93,19 @@ paths:
         description: "ID of badge"
         required: true
         type: "string"
-      - name:
+      - name: "name"
         in: "formData"
         description: "Badge name"
         type: "string"
-      - location:
+      - name: "location"
         in: "formData"
         description: "Badge location"
         type: "string"
-      - lat:
+      - name: "lat"
         in: "formData"
         type: "string"
         description: "Location latitude"
-      - long:
+      - name: "long"
         in: "formData"
         type: "string"
         description: "Location longitude"
