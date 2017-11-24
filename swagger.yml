@@ -23,7 +23,20 @@ paths:
       - in: formData
         name: badge
         type: file
+        required: true
         description: The file to upload
+      - in: formData
+        name: name
+        type: string
+        description: Badge name
+      - in: formData
+        name: lat
+        type: string
+        description: Location latitude
+      - in: formData
+        name: long
+        type: string
+        description: Location longitude
       responses:
         201:
           description: "Image added"
@@ -31,16 +44,21 @@ paths:
             $ref: "#/definitions/Badge"
         405:
           description: "Invalid input"
-  /badge/dashbaord:
     get:
       tags:
       - "badge"
-      summary: "Returns badge on the dashbaord"
+      summary: "Returns list of all available badges"
       produces:
-      - image/png
+      - "application/json"
       responses:
         200:
-          description: Badge image on the dashboard
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Badge"
+        404:
+          description: "No such image"
   /badge/{id}:
     get:
       tags:
@@ -57,22 +75,6 @@ paths:
       responses:
         200:
           description: "Badge image"
-        404:
-          description: "No such image"
-  /badge/list:
-    get:
-      tags:
-      - "badge"
-      summary: "Returns list of all available badges"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Successful response"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Badge"
         404:
           description: "No such image"
   /location:
