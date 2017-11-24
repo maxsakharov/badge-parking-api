@@ -40,11 +40,37 @@ app.post('/badge', upload.single('badge'), function (req, res, next) {
 app.get('/badge', function(req, res){
 	var badges = [];
 	fs.readdirSync(dataDir).forEach(file => {
-
-		var data = fs.readFileSync(dataDir + file, 'utf8');
-		badges.push(JSON.parse(data));
+		if (file.endsWith('.json')){
+			var data = fs.readFileSync(dataDir + file, 'utf8');
+			console.log(data);
+			badges.push(JSON.parse(data));
+		}
 	});
 	res.status(200).send(badges);
+})
+
+app.get('/badge/:id', function(req, res){
+	var badgeId = req.params.id;
+	var result = null;
+	fs.readdirSync(dataDir).forEach(file => {
+		if (file.endsWith('.json')){
+			if (result == null){
+				var data = fs.readFileSync(dataDir + file, 'utf8');
+				var badge = JSON.parse(data);
+				if (badge.id == badgeId && result == null){
+					result = badge;
+				}
+			}
+		}
+		
+		
+	});
+	if (result){
+		res.status(200).send(result);
+	}else{
+		res.status(404).send();
+	}
+	
 })
 
 
