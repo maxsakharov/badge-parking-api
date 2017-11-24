@@ -5,6 +5,7 @@ var multer  = require('multer');
 var uuid = require('uuid/v4');
 var util = require('util');
 var bodyParser = require('body-parser')
+var geolib = require('geolib');
 
 var upload = multer({dest: 'uploads/'});
 
@@ -47,7 +48,6 @@ app.get('/badge', function(req, res){
 	fs.readdirSync(badgeDataDir).forEach(file => {
 		if (file.endsWith('.json')){
 			var data = fs.readFileSync(badgeDataDir + file, 'utf8');
-			console.log(data);
 			badges.push(JSON.parse(data));
 		}
 	});
@@ -58,13 +58,7 @@ app.get('/badge/:id/image', function(req, res){
 	var badgeId = req.params.id;
 	var result = findBadgeById(badgeId);
 	
-	if (result){
-		var data = fs.readFileSync(result.imagePath);
-		res.setHeader('content-type', 'image/png');
-		res.status(200).send(data);
-	}else{
-		res.status(404).send();
-	}
+	renderBadgeImage(res, result);
 })
 
 app.get('/badge/:id', function(req, res){
@@ -99,15 +93,52 @@ app.put('/badge/:id', function(req, res){
 	}
 })
 
+app.get('/dashboard', function(req, res){
+	var location = readLocation();
+	if (location){
+		var result = null;
+		fs.readdirSync(badgeDataDir).forEach(file => {
+			if (file.endsWith('.json') && result == null){
+				var data = fs.readFileSync(badgeDataDir + file, 'utf8');
+				var badge = JSON.parse(data);
+
+				var inside = geolib.isPointInCircle(
+				    {latitude: location.latitude, longitude: location.longitude},
+				    {latitude: badge.lat, longitude: badge.long},
+				    30
+				);
+				console.log(inside);
+				if (inside){
+					result = badge;
+				}
+			}
+		});
+
+		renderBadgeImage(res, result);
+	}else{
+		res.status(404).send({'status': 'Location not defined'});
+	}
+})
+
 app.post('/location', function(req, res){
 	var location = {
 		latitude: req.query.lat,
 		longitude: req.query.long
 	}
-	fs.writeFileSync(locationFile, JSON.stringify(location) , 'utf-8'); 
+	saveLocation(location);
 
 	res.status(200).send({'status': 'ok'});
 })
+
+function renderBadgeImage(res, badge){
+	if (badge){
+		var data = fs.readFileSync(badge.imagePath);
+		res.setHeader('content-type', 'image/png');
+		res.status(200).send(data);
+	}else{
+		res.status(404).send();
+	}
+}
 
 function findBadgeById(badgeId){
 	var result = null;
@@ -127,6 +158,19 @@ function findBadgeById(badgeId){
 
 function saveBadge(badge){
 	fs.writeFileSync(badgeDataDir + badge.id + '.json', JSON.stringify(badge) , 'utf-8'); 
+}
+
+function readLocation(){
+	var location = null;
+	try{
+		var data = fs.readFileSync(locationFile, 'utf8');
+		location = JSON.parse(data);
+	} catch(err){console.log(err)}
+	
+	return location;
+}
+function saveLocation(location){
+	fs.writeFileSync(locationFile, JSON.stringify(location) , 'utf-8'); 
 }
 
 module.exports = app;
