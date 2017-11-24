@@ -63,7 +63,62 @@ paths:
     get:
       tags:
       - "badge"
-      summary: "Returns badge image metadata"
+      summary: "Returns badge data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of badge"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Badge data"
+          schema:
+              $ref: "#/definitions/Badge"
+        404:
+          description: "No such badge"
+    patch:
+      tags:
+      - "badge"
+      summary: "Updates badge data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of badge"
+        required: true
+        type: "string"
+      - name:
+        in: "formData"
+        description: "Badge name"
+        type: "string"
+      - location:
+        in: "formData"
+        description: "Badge location"
+        type: "string"
+      - lat:
+        in: "formData"
+        type: "string"
+        description: "Location latitude"
+      - long:
+        in: "formData"
+        type: "string"
+        description: "Location longitude"
+      responses:
+        200:
+          description: "Badge data"
+          schema:
+              $ref: "#/definitions/Badge"
+        404:
+          description: "No such badge"
+  /badge/{id}/image:
+    get:
+      tags:
+      - "badge"
+      summary: "Returns badge image"
       produces:
       - image/png
       parameters:
@@ -76,7 +131,19 @@ paths:
         200:
           description: "Badge image"
         404:
-          description: "No such image"
+          description: "No such badge"
+  /dashboard:
+    get:
+      tags:
+      - "badge"
+      summary: "Returns badge image for the vurrent location"
+      produces:
+      - image/png
+      responses:
+        200:
+          description: "Badge image"
+        404:
+          description: "No such badge"
   /location:
     post:
       tags:
@@ -111,6 +178,10 @@ definitions:
         format: "date-time"
         description: "date in UTC when badge was created"
       location:
+        type: "string"
+      lat:
+        type: "string"
+      long:
         type: "string"
 externalDocs:
   description: "Find out more about Swagger"
