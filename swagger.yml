@@ -28,15 +28,23 @@ paths:
       - in: formData
         name: name
         type: string
+        required: true
         description: Badge name
       - in: formData
         name: lat
         type: string
+        required: true
         description: Location latitude
       - in: formData
         name: long
         type: string
+        required: true
         description: Location longitude
+      - in: formData
+        name: is_default
+        type: boolean
+        required: false
+        description: Consider given badge image as default
       responses:
         201:
           description: "Image added"
@@ -63,7 +71,7 @@ paths:
     get:
       tags:
       - "badge"
-      summary: "Returns badge data"
+      summary: "Returns badge metadata"
       produces:
       - "application/json"
       parameters:
@@ -96,19 +104,18 @@ paths:
       - name: "name"
         in: "formData"
         description: "Badge name"
-        type: "string"
-      - name: "location"
-        in: "formData"
-        description: "Badge location"
+        required: true        
         type: "string"
       - name: "lat"
         in: "formData"
+        description: "Location latitude"        
+        required: true
         type: "string"
-        description: "Location latitude"
       - name: "long"
         in: "formData"
+        description: "Location longitude"        
+        required: true
         type: "string"
-        description: "Location longitude"
       responses:
         200:
           description: "Badge data"
@@ -116,34 +123,18 @@ paths:
               $ref: "#/definitions/Badge"
         404:
           description: "No such badge"
-  /badge/{id}/image:
-    get:
-      tags:
-      - "badge"
-      summary: "Returns badge image"
-      produces:
-      - image/png
-      parameters:
-      - name: "id"
-        in: "path"
-        description: "ID of badge"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Badge image"
-        404:
-          description: "No such badge"
   /dashboard:
     get:
       tags:
       - "badge"
-      summary: "Returns badge image for the vurrent location"
+      summary: "Returns badge image metadata for the current location"
       produces:
       - image/png
       responses:
         200:
-          description: "Badge image"
+          description: "Badge data"
+          schema:
+              $ref: "#/definitions/Badge"
         404:
           description: "No such badge"
   /location:
@@ -167,6 +158,17 @@ paths:
       responses:
         200:
           description: "Successful response"
+    get:
+      tags:
+      - "location"
+      summary: "Returns current location of the badge screen"
+      produces:
+      - "application/json"      
+      responses:
+        200:
+          description: "Badge screen location info"
+          schema:
+              $ref: "#/definitions/Location"
 definitions:
   Badge:
     type: "object"
@@ -178,13 +180,25 @@ definitions:
       createed_at: 
         type: "string"
         format: "date-time"
-        description: "date in UTC when badge was created"
-      location:
+        description: "Date in UTC when badge was created"
+      location:        
         type: "string"
+        description: "Physical location of the badge image"
       lat:
         type: "string"
+        description: "Latitude of the badge"
       long:
         type: "string"
+        description: "Longitude of the badge"
+  Location:
+    type: "object"
+    properties:   
+      lat: 
+        type: "number"
+        description: "Latitude of badge screen" 
+      long: 
+        type: "number"
+        description: "Longitude of badge screen" 
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

@@ -7,10 +7,9 @@ const signals = {
 module.exports.register = (server) => {
     Object.keys(signals).forEach(function (signal) {
       process.on(signal, () => {
-        server.close((server) => {
-            console.log('server stopped by ' + signal);
-            process.exit(0);
-        });
+        console.log('server stopped by ' + signal);
+        server.close();
+        process.exit(0);
       });
     });
 }
