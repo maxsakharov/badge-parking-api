@@ -3,7 +3,7 @@ var geolib = require('geolib');
 var badgeStorage = require(path.resolve('app/storage/badge'));
 var locationStorage = require(path.resolve('app/storage/location'));
 
-const radius = 30;
+const radius = 10;
 
 module.exports = (req, res, next) => {
     var currentLocation = locationStorage.getCurrentLocation();
@@ -31,17 +31,22 @@ module.exports = (req, res, next) => {
         })
         .then(badge => {
           if (!badge) {
-            console.log('Using default badge for current location ' + JSON.stringify(currentLocation));
-            return badgeStorage.getMetadataFile(badgeStorage.defaultBadgeId())
-              .then(defaultBadge => {
-                res.status(200).send(defaultBadge);
-              });
+            return defaultBadge(res, next);
           } else {
             res.status(200).send(badge);
           }          
         })
         .catch(next);
     } else {
-      res.status(404).send({'status': 'Initial location not defined'});
+      return defaultBadge(res, next);
     }
+}
+
+var defaultBadge = (res, next) => {
+  console.log('Using default badge for current location');
+    return badgeStorage.getMetadataFile(badgeStorage.defaultBadgeId())
+    .then(defaultBadge => {
+      res.status(200).send(defaultBadge);
+    })
+    .catch(next);
 }

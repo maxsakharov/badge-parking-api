@@ -14,6 +14,7 @@ module.exports.saveLocation = (long, lat) => {
 }
 
 module.exports.getCurrentLocation = () => {
+    if (!fs.existsSync(locationFile)) return null;
 		var data = fs.readFileSync(locationFile, 'utf8');
 		return JSON.parse(data);
 }
