@@ -5,6 +5,9 @@ const dataDir       = './.data';
 const locationFile  = dataDir + '/location.json';
 
 module.exports.saveLocation = (long, lat) => {
+  if (!long || !lat) {
+    return res.status(400).send({"error": "please provide long and lat"});
+  }
   if (!fs.existsSync(dataDir)){
     fs.mkdirSync(dataDir);
   }
