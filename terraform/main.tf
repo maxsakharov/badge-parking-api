@@ -95,6 +95,7 @@ data "template_file" "userdata" {
     region                = "${var.aws_region}"
     cadvisor_port         = "${var.cadvisor_port}"
     cadvisor_url          = "${var.cadvisor_url}"
+    environment           = "${var.environment}"
     random                = "${random_id.default.hex}"
     docker_image_tag      = "${var.environment}"
   }
@@ -119,6 +120,11 @@ resource "aws_instance" "api_instance" {
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_s3_bucket" "data_bucket" {
+  bucket = "badge-files-${var.environment}"
+  acl    = "public-read"
 }
 
 

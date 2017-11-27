@@ -2,7 +2,7 @@ var Promise = require('bluebird');
 var AWS = require('aws-sdk');
 var util = require('util')
 
-const bucket = "badge-files";
+const bucket = "badge-files-" + process.env.ENV;
 const badgeMetadataFolder = "badge-metadata";
 const badgeImageFodler = "badge-image";
 const region = "us-west-2";

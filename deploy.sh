@@ -3,7 +3,7 @@
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 ACTION=$1
 SERVICE=badge-api.service
-DEV_SERVER=34.238.8.62
+DEV_SERVER=52.4.240.117
 PROD_SERVER=187.23.1.45
 
 if [[ -z ${ACTION} ]]; then
