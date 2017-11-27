@@ -52,7 +52,9 @@ module.exports.listMetadataFiles = () => {
 }
 
 module.exports.publicImageLocation = (id) => {
-  return util.format("https://s3-%s.amazonaws.com/%s/%s/%s", region, bucket, badgeImageFodler, id)
+  // uncomment for us-west-2
+  // return util.format("https://s3-%s.amazonaws.com/%s/%s/%s", region, bucket, badgeImageFodler, id)
+  return util.format("https://s3.amazonaws.com/%s/%s/%s", bucket, badgeImageFodler, id)
 }
 
 var storeFile = (bucket, folder, filename, data, acl) => {

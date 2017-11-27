@@ -1,5 +1,6 @@
 var shutdownHook = require('./shutdownhook');
 var path    = require('path');
+var cors    = require('cors')
 var yaml    = require('yamljs');
 var express = require('express');
 var multer  = require('multer');
@@ -12,6 +13,7 @@ var swaggerUi   = require('swagger-ui-express');
 // set up
 var app = express();
 
+app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -39,5 +41,6 @@ app.get('/location',  routes.getLocation);
 
 app.use(function (err, req, res, next) {
   if(!err) return next();
+  console.error(err);
   res.status(500).send({"error": err.message});
 });

@@ -27,10 +27,7 @@ resource "aws_iam_role_policy" "default" {
     {
       "Action": [
         "ec2:DescribeInstances",
-        "s3:ListBucket",
-        "s3:PutObject",
-        "s3:GetObject",
-        "logs:*"
+        "s3:*"
       ],
       "Effect": "Allow",
       "Resource": "*"
