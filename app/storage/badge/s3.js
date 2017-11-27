@@ -5,7 +5,7 @@ var util = require('util')
 const bucket = "badge-files-" + process.env.ENV;
 const badgeMetadataFolder = "badge-metadata";
 const badgeImageFodler = "badge-image";
-const region = "us-west-2";
+const region = "us-east-1";
 
 AWS.config.setPromisesDependency(Promise);
 AWS.config.update({region: region});
