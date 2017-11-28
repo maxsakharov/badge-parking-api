@@ -2,6 +2,8 @@ var path = require('path');
 var geolib = require('geolib');
 var badgeStorage = require(path.resolve('app/storage/badge'));
 var locationStorage = require(path.resolve('app/storage/location'));
+var receiptStorage = require(path.resolve('app/storage/receipt'));
+var receiptTemplate = 'receipt1.jpg';
 
 const radius = 10;
 
@@ -31,8 +33,17 @@ module.exports = (req, res, next) => {
         })
         .then(badge => {
           if (!badge) {
+            var matchedBadge = locationStorage.getMatchedBadge();
+            if (matchedBadge && matchedBadge.badgeId != 'default'){
+                receiptStorage.getImageFile(receiptTemplate)
+                .then(file => {
+                  receiptStorage.storeReceipt(file.Body, 'public-read');
+                });
+            }
+            locationStorage.saveMatchedBadge('default');
             return defaultBadge(res, next);
           } else {
+            locationStorage.saveMatchedBadge(badge.id);
             res.status(200).send(badge);
           }          
         })

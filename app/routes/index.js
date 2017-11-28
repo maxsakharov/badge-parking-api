@@ -6,3 +6,5 @@ module.exports.getBadgeList        = require('./badge/list');
 
 module.exports.updateLocation      = require('./location/update');
 module.exports.getLocation         = require('./location/get');
+
+module.exports.deleteReceipt         = require('./receipt/delete');
