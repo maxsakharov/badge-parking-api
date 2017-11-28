@@ -169,6 +169,16 @@ paths:
           description: "Badge screen location info"
           schema:
               $ref: "#/definitions/Location"
+  /receipt:
+    delete:
+      tags:
+      - "receipt"
+      summary: "Removes current receipt"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful response"
 definitions:
   Badge:
     type: "object"
