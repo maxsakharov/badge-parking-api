@@ -30,7 +30,10 @@ var storeFile = (bucket, folder, filename, data, acl) => {
     Bucket: bucket, 
     Key: folder + '/' + filename, 
     ACL: acl || 'private',
-    ServerSideEncryption: "AES256"
+    ServerSideEncryption: "AES256",
+    Metadata: {
+     "Cache-Control": "no-cache"
+    }
   };
 
   return s3.putObject(params).promise()
