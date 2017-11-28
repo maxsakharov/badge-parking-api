@@ -39,6 +39,8 @@ app.get('/dashboard', routes.getDashboardBadge);
 app.post('/location', routes.updateLocation);
 app.get('/location',  routes.getLocation);
 
+app.delete('/receipt',  routes.deleteReceipt);
+
 app.use(function (err, req, res, next) {
   if(!err) return next();
   console.error(err);
