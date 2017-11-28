@@ -5,7 +5,7 @@ var locationStorage = require(path.resolve('app/storage/location'));
 var receiptStorage = require(path.resolve('app/storage/receipt'));
 var receiptTemplate = 'receipt1.jpg';
 
-const radius = 30;
+const radius = 60;
 
 module.exports = (req, res, next) => {
     var currentLocation = locationStorage.getCurrentLocation();
